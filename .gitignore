@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.venv/
+venv/
+ENV/
+tesseract_env/
+tesseract_pkgs/
+
+# IDEs
+.idea/
+.vscode/
+
+# Caches and logs
+.pytest_cache/
+*.log
+
+# Project specific
+uploads/*
+!uploads/.gitkeep
+outputs/*
+!outputs/.gitkeep
+
+# Setup binaries and temporary scripts
+tesseract-setup.exe
+reconstruct_git_history.py

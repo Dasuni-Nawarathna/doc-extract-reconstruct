@@ -1,0 +1,15 @@
+# Core
+python-docx>=1.1.0
+lxml>=4.9.0
+PyMuPDF>=1.24.0
+
+# Image processing
+opencv-python-headless>=4.8.0
+Pillow>=10.0.0
+
+# OCR
+pytesseract>=0.3.10
+
+# Math OCR (optional — install separately if needed)
+# pix2tex>=0.1.0          # Heavy: requires PyTorch (~2GB)
+# rapid-latex-ocr>=0.0.6  # Light: ONNX-based alternative
