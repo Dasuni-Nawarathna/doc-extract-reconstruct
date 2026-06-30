@@ -1,0 +1,16 @@
+========================================================================
+DOC-EXTRACT-RECONSTRUCT — CONFIDENCE REPORT
+========================================================================
+Source file : tests\fixtures\test_formatted.docx
+Output file : tests\fixtures\cli_output.docx
+
+Total elements tracked : 40
+  HIGH confidence      : 40
+  MEDIUM confidence    : 0
+  LOW confidence       : 0
+
+All elements reconstructed with HIGH confidence. ✓
+
+========================================================================
+END OF REPORT
+========================================================================
