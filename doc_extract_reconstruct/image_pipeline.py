@@ -497,7 +497,7 @@ except Exception as e:
             else:
                 logger.debug("winocr subprocess exited with code %d: %s", result.returncode, result.stderr)
         except Exception as e:
-            logger.debug("Windows Media OCR subprocess failed: %s. Falling back to Tesseract.", e)
+            logger.debug("Windows Media OCR subprocess fallback failed: %s", e)
 
     logger.warning("All OCR options failed or returned no text.")
     return []
