@@ -304,8 +304,6 @@ def _preprocess_image(img_path: str, tmpdir: str, page_idx: int) -> str:
     Preprocess an image for better OCR accuracy:
     - Convert to grayscale
     - Deskew
-    - Adaptive thresholding
-    - Noise removal
     """
     try:
         import cv2
@@ -328,17 +326,8 @@ def _preprocess_image(img_path: str, tmpdir: str, page_idx: int) -> str:
     # Deskew
     gray = _deskew(gray)
 
-    # Noise removal (median blur)
-    gray = cv2.medianBlur(gray, 3)
-
-    # Adaptive thresholding for binarization
-    binary = cv2.adaptiveThreshold(
-        gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-        cv2.THRESH_BINARY, 11, 2,
-    )
-
     out_path = os.path.join(tmpdir, f"preprocessed_{page_idx:04d}.png")
-    cv2.imwrite(out_path, binary)
+    cv2.imwrite(out_path, gray)
 
     return out_path
 
