@@ -375,11 +375,72 @@ def _deskew(image) -> np.ndarray:
 def _run_ocr(img_path: str) -> list[OcrWord]:
     """
     Run OCR on an image and return word-level data.
-    Attempts to use Windows Media OCR (winocr) first on Windows via a subprocess.
-    Falls back to Tesseract if unavailable.
+    Attempts to use Tesseract OCR first for highest accuracy across any font style.
+    Falls back to Windows Media OCR (winocr) on Windows if Tesseract is not installed.
     """
-    # ── 1. Try Windows Media OCR (winocr) via subprocess ───────────
+    tesseract_available = False
+    
+    # ── 1. Attempt Tesseract OCR first ──────────────────────────────
+    try:
+        import pytesseract
+        import shutil
+        
+        # Auto-configure Tesseract path on Windows if not already on system PATH
+        if os.name == 'nt' and not shutil.which("tesseract"):
+            user_path = os.path.expandvars(r"%LOCALAPPDATA%\Programs\Tesseract-OCR\tesseract.exe")
+            sys_path = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+            if os.path.exists(user_path):
+                pytesseract.pytesseract.tesseract_cmd = user_path
+                logger.info("Auto-configured Tesseract path (User): %s", user_path)
+            elif os.path.exists(sys_path):
+                pytesseract.pytesseract.tesseract_cmd = sys_path
+                logger.info("Auto-configured Tesseract path (System): %s", sys_path)
+
+        # Validate that the tesseract command is actually working
+        pytesseract.get_tesseract_version()
+        tesseract_available = True
+    except Exception as e:
+        logger.warning("Tesseract OCR is not available/configured: %s. Will attempt WinOCR fallback if on Windows.", e)
+
+    if tesseract_available:
+        try:
+            from pytesseract import Output
+            data = pytesseract.image_to_data(
+                img_path, output_type=Output.DICT,
+                config='--psm 6',  # Assume uniform block of text
+            )
+            words = []
+            n_boxes = len(data['text'])
+
+            for i in range(n_boxes):
+                text = data['text'][i].strip()
+                if not text:
+                    continue
+
+                conf = float(data['conf'][i])
+
+                words.append(OcrWord(
+                    text=text,
+                    x=data['left'][i],
+                    y=data['top'][i],
+                    w=data['width'][i],
+                    h=data['height'][i],
+                    confidence=conf,
+                    block_num=data['block_num'][i],
+                    par_num=data['par_num'][i],
+                    line_num=data['line_num'][i],
+                    word_num=data['word_num'][i],
+                ))
+
+            if words:
+                logger.info("Tesseract OCR successfully detected %d words", len(words))
+                return words
+        except Exception as e:
+            logger.error("Tesseract OCR execution failed: %s. Attempting fallback.", e)
+
+    # ── 2. Fallback to Windows Media OCR (winocr) on Windows ───────
     if os.name == 'nt':
+        logger.info("Falling back to Windows Media OCR (winocr)")
         try:
             import subprocess
             import json
@@ -429,7 +490,7 @@ except Exception as e:
                                 word_num=word_num
                             ))
                     if words:
-                        logger.info("Windows Media OCR (subprocess) successfully processed image with %d words", len(words))
+                        logger.info("Windows Media OCR (subprocess) fallback successfully processed image with %d words", len(words))
                         return words
                 else:
                     logger.debug("winocr subprocess returned error: %s", data["error"])
@@ -438,64 +499,8 @@ except Exception as e:
         except Exception as e:
             logger.debug("Windows Media OCR subprocess failed: %s. Falling back to Tesseract.", e)
 
-
-    # ── 2. Fallback to Tesseract OCR ────────────────────────────────
-    try:
-        import pytesseract
-        from pytesseract import Output
-        
-        # Auto-configure Tesseract path on Windows if not already on system PATH
-        import shutil
-        if os.name == 'nt' and not shutil.which("tesseract"):
-            user_path = os.path.expandvars(r"%LOCALAPPDATA%\Programs\Tesseract-OCR\tesseract.exe")
-            sys_path = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-            if os.path.exists(user_path):
-                pytesseract.pytesseract.tesseract_cmd = user_path
-                logger.info("Auto-configured Tesseract path (User): %s", user_path)
-            elif os.path.exists(sys_path):
-                pytesseract.pytesseract.tesseract_cmd = sys_path
-                logger.info("Auto-configured Tesseract path (System): %s", sys_path)
-    except ImportError:
-        raise ImportError(
-            "pytesseract is required for image OCR fallback. "
-            "Install with: pip install pytesseract\n"
-            "Also install Tesseract OCR: https://github.com/tesseract-ocr/tesseract"
-        )
-
-    try:
-        data = pytesseract.image_to_data(
-            img_path, output_type=Output.DICT,
-            config='--psm 6',  # Assume uniform block of text
-        )
-    except Exception as e:
-        logger.error("Tesseract OCR failed: %s", e)
-        return []
-
-    words = []
-    n_boxes = len(data['text'])
-
-    for i in range(n_boxes):
-        text = data['text'][i].strip()
-        if not text:
-            continue
-
-        conf = float(data['conf'][i])
-
-        words.append(OcrWord(
-            text=text,
-            x=data['left'][i],
-            y=data['top'][i],
-            w=data['width'][i],
-            h=data['height'][i],
-            confidence=conf,
-            block_num=data['block_num'][i],
-            par_num=data['par_num'][i],
-            line_num=data['line_num'][i],
-            word_num=data['word_num'][i],
-        ))
-
-    logger.info("OCR detected %d words", len(words))
-    return words
+    logger.warning("All OCR options failed or returned no text.")
+    return []
 
 
 def _group_words_into_lines(words: list[OcrWord]) -> list[OcrLine]:
