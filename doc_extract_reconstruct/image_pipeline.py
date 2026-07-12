@@ -650,7 +650,7 @@ def _estimate_font_size(word_height_px: int, dpi: float) -> float:
     return round(adjusted_pt, 1)
 
 
-def _estimate_bold(word: OcrWord, img_path: str) -> bool:
+def _estimate_bold(word: OcrWord, img_path: str, ref_h: Optional[int] = None) -> bool:
     """
     Estimate whether a word is bold based on stroke width analysis.
 
@@ -690,7 +690,9 @@ def _estimate_bold(word: OcrWord, img_path: str) -> bool:
 
         # Bold text typically has thicker strokes
         # This threshold is empirically tuned and may need adjustment
-        threshold = 2.5 * (h / 20)  # Scale with word height
+        if ref_h is None:
+            ref_h = h
+        threshold = 2.5 * (ref_h / 20)  # Scale with reference height
         return mean_dist > threshold
 
     except Exception:
