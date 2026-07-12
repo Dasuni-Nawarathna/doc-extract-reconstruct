@@ -320,7 +320,6 @@ def _preprocess_image(img_path: str, tmpdir: str, page_idx: int) -> str:
         return img_path
 
     # Convert to grayscale
-    logger.info("Converting page %d to grayscale", page_idx + 1)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # Deskew
