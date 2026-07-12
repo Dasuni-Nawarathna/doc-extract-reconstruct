@@ -250,6 +250,28 @@ def _process_single_image(
     effective_dpi = img_dpi[1] if isinstance(img_dpi, tuple) else img_dpi
     img.close()
 
+    # ── First Pass: Collect median line heights to find dominant text height ──
+    all_heights = []
+    for para in paragraphs:
+        if para.is_all_math:
+            continue
+        for line in para.lines:
+            if line.is_math:
+                continue
+            if line.words:
+                line_word_heights = [w.h for w in line.words]
+                all_heights.append(_median(line_word_heights))
+
+    if all_heights:
+        dominant_height = _median(all_heights)
+    else:
+        dominant_height = 20  # Fallback
+
+    dominant_font_size = _estimate_font_size(dominant_height, effective_dpi)
+    logger.info("Dominant document height: %.1f px, Dominant font size: %.1f pt", dominant_height, dominant_font_size)
+
+    # ── Detect dominant font style (Serif vs Sans-Serif) ───────────
+
     # ── Write to document ──────────────────────────────────────────
     para_idx = 0
     for para in paragraphs:
@@ -275,27 +297,33 @@ def _process_single_image(
                 )
                 continue
 
+            # Calculate line-level reference height using median to be robust against graphical/layout outliers
+            line_ref_height = int(_median([w.h for w in line.words])) if line.words else 20
+            raw_size = _estimate_font_size(line_ref_height, effective_dpi)
+
+            # Temporarily bypass normalization snapping
+            est_line_size = raw_size
+
             for word in line.words:
                 if word.confidence < MIN_WORD_CONFIDENCE:
                     continue
 
                 # ── Estimate formatting from image heuristics ──
-                est_size = _estimate_font_size(word.h, effective_dpi)
-                est_bold = _estimate_bold(word, preprocessed_path)
+                est_bold = _estimate_bold(word, preprocessed_path, line_ref_height)
                 est_italic = _estimate_italic(word)
 
                 run = create_run(
                     dst_p,
                     text=word.text + " ",
                     font_name=DEFAULT_FONT,
-                    font_size=est_size,
+                    font_size=est_line_size,
                     bold=est_bold or None,
                     italic=est_italic or None,
                 )
 
-                # Flag low confidence items
-                if word.confidence < 60:
-                    highlight_low_confidence(run)
+                # Flag low confidence items (in-document highlights disabled per user request)
+                # if word.confidence < 60:
+                #     highlight_low_confidence(run)
 
                 # Report confidence for font family (always LOW for images)
                 report.add_simple(
