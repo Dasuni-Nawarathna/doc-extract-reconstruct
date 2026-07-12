@@ -324,9 +324,9 @@ def _process_single_image(
                     italic=est_italic or None,
                 )
 
-                # Flag low confidence items
-                if word.confidence < 60:
-                    highlight_low_confidence(run)
+                # Flag low confidence items (in-document highlights disabled per user request)
+                # if word.confidence < 60:
+                #     highlight_low_confidence(run)
 
                 # Report confidence for font family (always LOW for images)
                 report.add_simple(
@@ -750,7 +750,7 @@ def _handle_equation_paragraph(
     # Fallback: insert placeholder
     placeholder = create_placeholder_run()
     run = create_run(dst_p, text=placeholder)
-    highlight_low_confidence(run)
+    # highlight_low_confidence(run)
     report.add_simple(
         location=location,
         property_name="equation",
@@ -792,7 +792,7 @@ def _handle_equation_line(
 
     # Fallback: insert the OCR text with low confidence
     run = create_run(dst_p, text=line.text + " ")
-    highlight_low_confidence(run)
+    # highlight_low_confidence(run)
     report.add_simple(
         location=location,
         property_name="equation",
