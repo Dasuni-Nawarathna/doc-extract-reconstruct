@@ -56,6 +56,18 @@ PARAGRAPH_GAP_RATIO = 1.8
 MATH_DENSITY_THRESHOLD = 0.25
 
 
+def _median(lst: list) -> float:
+    """Compute the median of a numeric list."""
+    if not lst:
+        return 0.0
+    s = sorted(lst)
+    n = len(s)
+    if n % 2 == 1:
+        return float(s[n // 2])
+    else:
+        return float(s[n // 2 - 1] + s[n // 2]) / 2.0
+
+
 @dataclass
 class OcrWord:
     """A word extracted from OCR with positioning and confidence."""
