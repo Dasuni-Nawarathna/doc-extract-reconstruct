@@ -516,7 +516,7 @@ def _group_words_into_lines(words: list[OcrWord]) -> list[OcrLine]:
 
     lines = []
     for key in sorted(line_map.keys()):
-        line_words = sorted(line_map[key], key=lambda w: w.x)  # Sort left to right
+        line_words = sorted(line_map[key], key=lambda w: w.x)  # Sort left to right horizontally
         if line_words:
             y = min(w.y for w in line_words)
             h = max(w.y + w.h for w in line_words) - y
