@@ -301,8 +301,11 @@ def _process_single_image(
             line_ref_height = int(_median([w.h for w in line.words])) if line.words else 20
             raw_size = _estimate_font_size(line_ref_height, effective_dpi)
 
-            # Temporarily bypass normalization snapping
-            est_line_size = raw_size
+            # Normalize font size: if within +/- 2.5pt of dominant body size, snap to dominant
+            if abs(raw_size - dominant_font_size) <= 2.5:
+                est_line_size = dominant_font_size
+            else:
+                est_line_size = raw_size
 
             for word in line.words:
                 if word.confidence < MIN_WORD_CONFIDENCE:
@@ -321,9 +324,9 @@ def _process_single_image(
                     italic=est_italic or None,
                 )
 
-                # Flag low confidence items (in-document highlights disabled per user request)
-                # if word.confidence < 60:
-                #     highlight_low_confidence(run)
+                # Flag low confidence items
+                if word.confidence < 60:
+                    highlight_low_confidence(run)
 
                 # Report confidence for font family (always LOW for images)
                 report.add_simple(
