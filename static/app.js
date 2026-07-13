@@ -28,6 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let selectedFile = null;
     let downloadUrl = null;
+    let base64FileData = null;
+    let outputFileName = null;
 
     // ── File Type Icons ───────────────────────────────────────────
     const FILE_COLORS = {
@@ -125,6 +127,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Success — show result
             downloadUrl = `/api/download/${data.output_file}`;
+            base64FileData = data.file_data;
+            outputFileName = data.output_file;
 
             // Build metadata chips
             resultMeta.innerHTML = `
@@ -155,7 +159,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ── Download ──────────────────────────────────────────────────
     downloadBtn.addEventListener("click", () => {
-        if (downloadUrl) {
+        if (base64FileData && outputFileName) {
+            const byteCharacters = atob(base64FileData);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], {type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
+            
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = outputFileName.split("_", 1)[1] || outputFileName;
+            link.click();
+        } else if (downloadUrl) {
             window.location.href = downloadUrl;
         }
     });

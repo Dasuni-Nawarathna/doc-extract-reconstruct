@@ -9,6 +9,7 @@ import os
 import uuid
 import logging
 import time
+import base64
 from pathlib import Path
 
 from flask import (
@@ -103,11 +104,18 @@ def convert():
         if report_path.exists():
             report_content = report_path.read_text(encoding="utf-8")
 
+        # Read generated DOCX file and encode as base64
+        file_data_b64 = ""
+        if output_path.exists():
+            with open(output_path, "rb") as out_f:
+                file_data_b64 = base64.b64encode(out_f.read()).decode("utf-8")
+
         return jsonify({
             "success": True,
             "job_id": job_id,
             "input_type": input_type.name,
             "output_file": output_name,
+            "file_data": file_data_b64,
             "elapsed": round(elapsed, 2),
             "report": report_content,
         })
@@ -120,6 +128,14 @@ def convert():
         # Clean up input file
         if input_path.exists():
             input_path.unlink(missing_ok=True)
+        # Clean up output file
+        if output_path.exists():
+            output_path.unlink(missing_ok=True)
+        # Clean up confidence report file
+        report_name = f"{Path(output_path).stem}_confidence_report.txt"
+        report_path = OUTPUT_DIR / report_name
+        if report_path.exists():
+            report_path.unlink(missing_ok=True)
 
 
 @app.route("/api/download/<filename>")
