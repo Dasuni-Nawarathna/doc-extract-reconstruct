@@ -73,6 +73,9 @@ def _detect_dominant_font(img_path: str) -> str:
     Detect whether the dominant font on a page is Serif or Sans-Serif.
     Returns "Times New Roman" if Serif, and "Calibri" (the default) if Sans-Serif.
     """
+    if os.environ.get("VERCEL"):
+        return "Calibri"
+
     try:
         import cv2
         import numpy as np
@@ -403,6 +406,19 @@ def _preprocess_image(img_path: str, tmpdir: str, page_idx: int) -> str:
     - Convert to grayscale
     - Deskew
     """
+    if os.environ.get("VERCEL"):
+        logger.info("Running on Vercel — using PIL for grayscale preprocessing.")
+        try:
+            from PIL import Image
+            out_path = os.path.join(tmpdir, f"preprocessed_{page_idx:04d}.png")
+            with Image.open(img_path) as img:
+                gray = img.convert('L')
+                gray.save(out_path)
+            return out_path
+        except Exception as e:
+            logger.warning("PIL preprocessing failed: %s. Returning original path.", e)
+            return img_path
+
     try:
         import cv2
     except ImportError:
@@ -433,6 +449,9 @@ def _deskew(image) -> np.ndarray:
     """
     Deskew a grayscale image by detecting the skew angle from contours.
     """
+    if os.environ.get("VERCEL"):
+        return image
+
     try:
         import cv2
 
@@ -713,6 +732,9 @@ def _estimate_bold(word: OcrWord, img_path: str, ref_h: Optional[int] = None) ->
     Accuracy depends heavily on image quality and font. Flagged as
     MEDIUM confidence in the output.
     """
+    if os.environ.get("VERCEL"):
+        return False
+
     try:
         import cv2
 
