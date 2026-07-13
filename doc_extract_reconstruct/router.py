@@ -160,8 +160,13 @@ def route(file_path: str, output_path: str, **kwargs) -> str:
         return process_docx(file_path, output_path, **kwargs)
 
     elif input_type == InputType.PDF_DIGITAL:
-        from .pdf_pipeline import process_pdf
-        return process_pdf(file_path, output_path, **kwargs)
+        try:
+            from .pdf_pipeline import process_pdf
+            return process_pdf(file_path, output_path, **kwargs)
+        except ImportError:
+            logger.warning("pdf_pipeline is not available. Falling back to scanned PDF (image-based) pipeline.")
+            from .image_pipeline import process_image
+            return process_image(file_path, output_path, is_scanned_pdf=True, **kwargs)
 
     elif input_type == InputType.PDF_SCANNED:
         from .image_pipeline import process_image
