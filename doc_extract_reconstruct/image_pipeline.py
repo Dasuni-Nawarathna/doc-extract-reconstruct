@@ -170,54 +170,6 @@ class OcrParagraph:
         return all(l.is_math for l in self.lines) if self.lines else False
 
 
-@dataclass
-class OcrWord:
-    """A word extracted from OCR with positioning and confidence."""
-    text: str
-    x: int      # left
-    y: int      # top
-    w: int      # width
-    h: int      # height
-    confidence: float  # 0-100
-    block_num: int = 0
-    par_num: int = 0
-    line_num: int = 0
-    word_num: int = 0
-
-
-@dataclass
-class OcrLine:
-    """A line of words grouped from OCR output."""
-    words: list[OcrWord] = field(default_factory=list)
-    y: int = 0
-    h: int = 0
-    is_math: bool = False
-
-    @property
-    def text(self) -> str:
-        return " ".join(w.text for w in self.words)
-
-    @property
-    def bbox(self) -> tuple:
-        if not self.words:
-            return (0, 0, 0, 0)
-        x0 = min(w.x for w in self.words)
-        y0 = min(w.y for w in self.words)
-        x1 = max(w.x + w.w for w in self.words)
-        y1 = max(w.y + w.h for w in self.words)
-        return (x0, y0, x1, y1)
-
-
-@dataclass
-class OcrParagraph:
-    """A paragraph of lines grouped by vertical proximity."""
-    lines: list[OcrLine] = field(default_factory=list)
-
-    @property
-    def is_all_math(self) -> bool:
-        return all(l.is_math for l in self.lines) if self.lines else False
-
-
 def process_image(
     input_path: str,
     output_path: str,
@@ -373,6 +325,7 @@ def _process_single_image(
     logger.info("Dominant document height: %.1f px, Dominant font size: %.1f pt", dominant_height, dominant_font_size)
 
     # ── Detect dominant font style (Serif vs Sans-Serif) ───────────
+    font_family = _detect_dominant_font(preprocessed_path)
 
     # ── Write to document ──────────────────────────────────────────
     para_idx = 0
@@ -420,7 +373,7 @@ def _process_single_image(
                 run = create_run(
                     dst_p,
                     text=word.text + " ",
-                    font_name=DEFAULT_FONT,
+                    font_name=font_family,
                     font_size=est_line_size,
                     bold=est_bold or None,
                     italic=est_italic or None,
@@ -661,7 +614,7 @@ def _group_words_into_lines(words: list[OcrWord]) -> list[OcrLine]:
 
     lines = []
     for key in sorted(line_map.keys()):
-        line_words = sorted(line_map[key], key=lambda w: w.x)  # Sort left to right horizontally
+        line_words = sorted(line_map[key], key=lambda w: w.x)  # Sort left to right
         if line_words:
             y = min(w.y for w in line_words)
             h = max(w.y + w.h for w in line_words) - y
