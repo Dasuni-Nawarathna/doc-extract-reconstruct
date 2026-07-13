@@ -68,6 +68,108 @@ def _median(lst: list) -> float:
         return float(s[n // 2 - 1] + s[n // 2]) / 2.0
 
 
+def _detect_dominant_font(img_path: str) -> str:
+    """
+    Detect whether the dominant font on a page is Serif or Sans-Serif.
+    Returns "Times New Roman" if Serif, and "Calibri" (the default) if Sans-Serif.
+    """
+    try:
+        import cv2
+        import numpy as np
+
+        img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+        if img is None:
+            return "Calibri"
+
+        # Binarize (Otsu)
+        _, binary = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+
+        # Find contours
+        contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        serif_votes = 0
+        sans_votes = 0
+
+        for cnt in contours:
+            x, y, w, h = cv2.boundingRect(cnt)
+
+            # Filter for vertical character stems (e.g. 'l', 'i', stems of 'h', 'd')
+            if 12 <= h <= 50 and w >= 2 and h > w * 2.0:
+                char_crop = binary[y:y+h, x:x+w]
+                row_sums = np.sum(char_crop, axis=1) / 255
+
+                top_part = row_sums[:max(1, int(h * 0.15))]
+                bottom_part = row_sums[-max(1, int(h * 0.15)):]
+                mid_part = row_sums[int(h * 0.25):int(h * 0.75)]
+
+                if len(top_part) > 0 and len(bottom_part) > 0 and len(mid_part) > 0:
+                    avg_top = np.mean(top_part)
+                    avg_bottom = np.mean(bottom_part)
+                    avg_mid = np.mean(mid_part)
+
+                    # If either the top or bottom cap is significantly wider than the stem, it has serifs
+                    if avg_top > avg_mid * 1.35 or avg_bottom > avg_mid * 1.35:
+                        serif_votes += 1
+                    else:
+                        sans_votes += 1
+
+        logger.info("Dominant font voting -> Serif Stems: %d, Sans Stems: %d", serif_votes, sans_votes)
+        if serif_votes > sans_votes and (serif_votes + sans_votes) > 5:
+            return "Times New Roman"
+    except Exception as e:
+        logger.debug("Dominant font detection failed: %s. Defaulting to Calibri.", e)
+
+    return "Calibri"
+
+
+@dataclass
+class OcrWord:
+    """A word extracted from OCR with positioning and confidence."""
+    text: str
+    x: int      # left
+    y: int      # top
+    w: int      # width
+    h: int      # height
+    confidence: float  # 0-100
+    block_num: int = 0
+    par_num: int = 0
+    line_num: int = 0
+    word_num: int = 0
+
+
+@dataclass
+class OcrLine:
+    """A line of words grouped from OCR output."""
+    words: list[OcrWord] = field(default_factory=list)
+    y: int = 0
+    h: int = 0
+    is_math: bool = False
+
+    @property
+    def text(self) -> str:
+        return " ".join(w.text for w in self.words)
+
+    @property
+    def bbox(self) -> tuple:
+        if not self.words:
+            return (0, 0, 0, 0)
+        x0 = min(w.x for w in self.words)
+        y0 = min(w.y for w in self.words)
+        x1 = max(w.x + w.w for w in self.words)
+        y1 = max(w.y + w.h for w in self.words)
+        return (x0, y0, x1, y1)
+
+
+@dataclass
+class OcrParagraph:
+    """A paragraph of lines grouped by vertical proximity."""
+    lines: list[OcrLine] = field(default_factory=list)
+
+    @property
+    def is_all_math(self) -> bool:
+        return all(l.is_math for l in self.lines) if self.lines else False
+
+
 @dataclass
 class OcrWord:
     """A word extracted from OCR with positioning and confidence."""
