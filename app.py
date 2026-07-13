@@ -23,8 +23,13 @@ from doc_extract_reconstruct.router import route, detect_input_type
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50 MB max upload
 
-UPLOAD_DIR = Path(__file__).parent / "uploads"
-OUTPUT_DIR = Path(__file__).parent / "outputs"
+if os.environ.get("VERCEL"):
+    UPLOAD_DIR = Path("/tmp") / "uploads"
+    OUTPUT_DIR = Path("/tmp") / "outputs"
+else:
+    UPLOAD_DIR = Path(__file__).parent / "uploads"
+    OUTPUT_DIR = Path(__file__).parent / "outputs"
+
 UPLOAD_DIR.mkdir(exist_ok=True)
 OUTPUT_DIR.mkdir(exist_ok=True)
 

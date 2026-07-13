@@ -1,0 +1,308 @@
+========================================================================
+DOC-EXTRACT-RECONSTRUCT — CONFIDENCE REPORT
+========================================================================
+Source file : simulated_input.png
+Output file : simulated_reconstructed_current.docx
+
+Total elements tracked : 58
+  HIGH confidence      : 0
+  MEDIUM confidence    : 0
+  LOW confidence       : 58
+
+------------------------------------------------------------------------
+LOW CONFIDENCE ITEMS (highlighted in output document)
+------------------------------------------------------------------------
+
+  [1] Page 1, Para 1, Word 'DID'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [2] Page 1, Para 1, Word 'YOU'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [3] Page 1, Para 2, Word 'English'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [4] Page 1, Para 2, Word 'is'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [5] Page 1, Para 2, Word 'important?'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [6] Page 1, Para 2, Word 'English'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [7] Page 1, Para 2, Word 'is'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [8] Page 1, Para 2, Word 'an'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [9] Page 1, Para 2, Word 'important'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [10] Page 1, Para 2, Word 'language'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [11] Page 1, Para 2, Word 'spoken'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [12] Page 1, Para 2, Word 'in'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [13] Page 1, Para 2, Word 'many'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [14] Page 1, Para 2, Word 'palts'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [15] Page 1, Para 2, Word 'of'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [16] Page 1, Para 2, Word 'the'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [17] Page 1, Para 2, Word 'world.'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [18] Page 1, Para 2, Word 'It'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [19] Page 1, Para 2, Word 'helps'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [20] Page 1, Para 2, Word 'us'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [21] Page 1, Para 2, Word 'talk'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [22] Page 1, Para 2, Word 'to'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [23] Page 1, Para 2, Word 'dish'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [24] Page 1, Para 2, Word 'people'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [25] Page 1, Para 2, Word 'from'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [26] Page 1, Para 2, Word 'other'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [27] Page 1, Para 2, Word 'countries.'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [28] Page 1, Para 2, Word 'We'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [29] Page 1, Para 2, Word 'use'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [30] Page 1, Para 2, Word 'English'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [31] Page 1, Para 2, Word 'in'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [32] Page 1, Para 2, Word 'school,'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [33] Page 1, Para 2, Word 'books,'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [34] Page 1, Para 2, Word 'songs,'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [35] Page 1, Para 2, Word 'and'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [36] Page 1, Para 2, Word 'even'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [37] Page 1, Para 2, Word 'movies.'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [38] Page 1, Para 2, Word 'Leaming'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [39] Page 1, Para 2, Word 'English'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [40] Page 1, Para 2, Word 'helps'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [41] Page 1, Para 2, Word 'us'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [42] Page 1, Para 2, Word 'to'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [43] Page 1, Para 2, Word 'study,'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [44] Page 1, Para 2, Word 'travel,'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [45] Page 1, Para 2, Word 'and'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [46] Page 1, Para 2, Word 'find'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [47] Page 1, Para 2, Word 'good'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [48] Page 1, Para 2, Word 'jobs.'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [49] Page 1, Para 2, Word 'That's'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [50] Page 1, Para 2, Word 'why'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [51] Page 1, Para 2, Word 'English'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [52] Page 1, Para 2, Word 'is'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [53] Page 1, Para 2, Word 'a'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [54] Page 1, Para 2, Word 'good'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [55] Page 1, Para 2, Word 'language'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [56] Page 1, Para 2, Word 'to'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [57] Page 1, Para 2, Word 'leam.'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+  [58] Page 1, Para 2, Word 'englishwizz'
+      Property: font_family
+      Detail  : Font family cannot be inferred from image pixels. Defaulted to 'Calibri'. OCR confidence: 99%
+      Reconstructed: Calibri
+
+========================================================================
+END OF REPORT
+========================================================================
