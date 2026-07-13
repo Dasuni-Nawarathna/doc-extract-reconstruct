@@ -488,11 +488,74 @@ def _deskew(image) -> np.ndarray:
         return image
 
 
+def _run_ocr_space(img_path: str) -> list[OcrWord]:
+    """
+    Run OCR using OCR.space API as a serverless cloud fallback.
+    """
+    api_key = os.environ.get("OCR_SPACE_API_KEY", "helloworld")
+    logger.info("Using OCR.space API fallback (Key: %s)", api_key[:4] + "..." if api_key != "helloworld" else "helloworld")
+    
+    import requests
+    try:
+        with open(img_path, 'rb') as f:
+            payload = {
+                'apikey': api_key,
+                'language': 'eng',
+                'isOverlayRequired': 'true',
+            }
+            files = {'file': (os.path.basename(img_path), f, 'image/png')}
+            r = requests.post('https://api.ocr.space/parse/image', data=payload, files=files, timeout=30)
+            
+        if r.status_code != 200:
+            logger.error("OCR.space API error (HTTP %d): %s", r.status_code, r.text)
+            return []
+            
+        res_json = r.json()
+        if res_json.get("OCRExitCode") not in (1, "1"):
+            err_msg = res_json.get("ErrorMessage", "Unknown API error")
+            logger.error("OCR.space API failed with error: %s", err_msg)
+            return []
+            
+        words = []
+        parsed_results = res_json.get("ParsedResults", [])
+        for p_res in parsed_results:
+            overlay = p_res.get("TextOverlay", {})
+            lines = overlay.get("Lines", [])
+            for line_idx, line in enumerate(lines):
+                for word_idx, w_data in enumerate(line.get("Words", [])):
+                    text = w_data.get("WordText", "").strip()
+                    if not text:
+                        continue
+                    
+                    x = int(float(w_data.get("Left", 0)))
+                    y = int(float(w_data.get("Top", 0)))
+                    w = int(float(w_data.get("Width", 0)))
+                    h = int(float(w_data.get("Height", 0)))
+                    
+                    words.append(OcrWord(
+                        text=text,
+                        x=x,
+                        y=y,
+                        w=w,
+                        h=h,
+                        confidence=85.0,
+                        block_num=0,
+                        par_num=0,
+                        line_num=line_idx,
+                        word_num=word_idx,
+                    ))
+        return words
+    except Exception as e:
+        logger.exception("OCR.space API request failed: %s", e)
+        return []
+
+
 def _run_ocr(img_path: str) -> list[OcrWord]:
     """
     Run OCR on an image and return word-level data.
     Attempts to use Tesseract OCR first for highest accuracy across any font style.
     Falls back to Windows Media OCR (winocr) on Windows if Tesseract is not installed.
+    Falls back to OCR.space API in cloud/headless environments if local OCR engines are unavailable.
     """
     tesseract_available = False
     
@@ -516,7 +579,7 @@ def _run_ocr(img_path: str) -> list[OcrWord]:
         pytesseract.get_tesseract_version()
         tesseract_available = True
     except Exception as e:
-        logger.warning("Tesseract OCR is not available/configured: %s. Will attempt WinOCR fallback if on Windows.", e)
+        logger.warning("Tesseract OCR is not available/configured: %s. Will attempt fallback.", e)
 
     if tesseract_available:
         try:
@@ -615,8 +678,9 @@ except Exception as e:
         except Exception as e:
             logger.debug("Windows Media OCR subprocess fallback failed: %s", e)
 
-    logger.warning("All OCR options failed or returned no text.")
-    return []
+    # ── 3. Fallback to OCR.space API in serverless/cloud environments ──
+    logger.info("Local OCR engines unavailable. Falling back to OCR.space cloud API.")
+    return _run_ocr_space(img_path)
 
 
 def _group_words_into_lines(words: list[OcrWord]) -> list[OcrLine]:
